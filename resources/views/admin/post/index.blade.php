@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
 
-                <a href="{{route('admin.posts.create')}}" class="btn btn-primary">Crea un post</a>
+                <a href="{{route('admin.posts.create')}}" class="btn btn-primary mb-4">Crea un post</a>
 
                 <table class="table">
                     <thead>
@@ -25,11 +25,11 @@
                             <td>{{$post->title}}</td>
                             <td>{{substr($post->content, 0, 30)}}</td>
                             <td>{{$post->slug}}</td>
-                            <td>{{$post->category->name}}</td>
+                            <td>{{isset($post->category)?$post->category->name:'N.D.'}}</td>
 
-                            <td>
-                              <a href="{{route('admin.posts.show', $post-id)}}" class="btn btn-primary" >Vedi</a>
-                              <a href="{{route('admin.posts.edit', $post-id)}}" class="btn btn-secondary" >Modifica</a>
+                            <td class="d-flex " >
+                              <a href="{{route('admin.posts.show', $post->id)}}" class="btn btn-primary" >Vedi</a>
+                              <a href="{{route('admin.posts.edit', $post->id)}}" class="btn btn-secondary" >Modifica</a>
 
                               <form method="POST" action="{{route('admin.posts.destroy', $post->id)}}" >
                                 @csrf

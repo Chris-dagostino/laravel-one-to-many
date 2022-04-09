@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Category;
 use App\Http\Controllers\Controller;
 use App\Post;
+use App\Tag;
 use Doctrine\Inflector\Rules\Word;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -30,7 +31,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.post.create', compact('categories'));
+        $tags = Tag::all();
+        return view('admin.post.create', compact('categories', 'tags'));
     }
 
     /**
@@ -45,7 +47,8 @@ class PostController extends Controller
             [
                 'title' => 'required|min:5',
                 'content' => 'required|min:10',
-                'category_id' => 'nullable|exists:categories,id'
+                'category_id' => 'nullable|exists:categories,id',
+                'tags_id' => 'nullable|exists:categories,id',
             ]
         );
 
@@ -62,12 +65,11 @@ class PostController extends Controller
         }
 
         $data['slug'] = $slug;
-
         $post = new Post();
-
         $post->fill($data);
-
         $post->save();
+
+        $post->tags()->sync($data['tags']);
 
         return redirect()->route('admin.posts.index');
     }
@@ -93,7 +95,8 @@ class PostController extends Controller
     {
 
         $categories = Category::all();
-        return view('admin.post.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('admin.post.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -130,14 +133,9 @@ class PostController extends Controller
 
         }
 
-        
-
-       
-
         $post->update($data);
-
         $post->save();
-
+        $post->tags()->sync($data['tags']);
         return redirect()->route('admin.posts.index');
     }
 

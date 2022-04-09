@@ -37,6 +37,7 @@
 
                         <li class="mx-2" ><a href="{{route('admin.home')}}">Dashboard</a></li>
                         <li class="mx-2" ><a href="{{route('admin.posts.index')}}">Post</a></li>
+                        <li class="mx-2" ><a href="{{route('admin.tags.index')}}">Tag</a></li>
 
                     </ul>
 
