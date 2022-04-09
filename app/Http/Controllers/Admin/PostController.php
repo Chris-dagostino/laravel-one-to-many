@@ -32,7 +32,7 @@ class PostController extends Controller
     {
         $categories = Category::all();
         $tags = Tag::all();
-        return view('admin.post.create', compact('categories', 'tags'));
+        return view('admin.post.create', compact('categories','tags'));
     }
 
     /**
@@ -48,7 +48,7 @@ class PostController extends Controller
                 'title' => 'required|min:5',
                 'content' => 'required|min:10',
                 'category_id' => 'nullable|exists:categories,id',
-                'tags_id' => 'nullable|exists:categories,id',
+                'tags' => 'nullable|exists:tags,id',
             ]
         );
 
@@ -58,8 +58,8 @@ class PostController extends Controller
         $slug = Str::slug($data['title']);
 
         $counter = 1;
-        while (Post::where('slug', $slug)->first()) {
-
+        while (Post::where('slug', '=', $slug)->first()) {
+            
             $slug = Str::slug($data['title']) . '-' . $counter;
             $counter++;
         }
@@ -111,7 +111,9 @@ class PostController extends Controller
         $request->validate(
             [
                 'title' => 'required|min:5',
-                'content' => 'required|min:10'
+                'content' => 'required|min:10',
+                'category_id' => 'nullable|exists:categories,id',
+                'tags' => 'nullable|exists:tags,id',
             ]
         );
 
@@ -120,22 +122,20 @@ class PostController extends Controller
 
         $slug = Str::slug($data['title']);
 
-        if ($post->slug != $slug ){
-            
+        if ($post->slug != $slug) {
             $counter = 1;
-            while (Post::where('slug', $slug)->first()) {
-
+            while ( Post::where('slug', '=', $slug)->first() ) {
                 $slug = Str::slug($data['title']) . '-' . $counter;
                 $counter++;
             }
-
             $data['slug'] = $slug;
-
         }
 
         $post->update($data);
         $post->save();
+
         $post->tags()->sync($data['tags']);
+
         return redirect()->route('admin.posts.index');
     }
 
