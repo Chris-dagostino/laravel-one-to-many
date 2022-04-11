@@ -1,6 +1,8 @@
 <?php
 
+use App\Tag;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class TagsTabSeeder extends Seeder
 {

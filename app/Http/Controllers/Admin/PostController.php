@@ -69,6 +69,7 @@ class PostController extends Controller
         $post->fill($data);
         $post->save();
 
+
         $post->tags()->sync($data['tags']);
 
         return redirect()->route('admin.posts.index');

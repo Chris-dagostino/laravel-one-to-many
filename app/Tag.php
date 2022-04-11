@@ -9,10 +9,7 @@ class Tag extends Model
     protected $fillable = ['name', 'slug'];
 
     public function posts(){
-        return $this->belongToMany('App\Category');
+        return $this->belongsToMany('App\Post');
     }
 
-    public function tagg(){
-        return $this->belongsToMany('App\Tag');
-    }
 }
